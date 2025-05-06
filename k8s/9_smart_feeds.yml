@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smart-feeds-config
+data:
+  REACT_APP_KEYCLOAK_URL: "https://keycloak.openlearnhub.io.vn/"
+  REACT_APP_KEYCLOAK_REALM: "OpenLearnHub"
+  REACT_APP_KEYCLOAK_CLIENT_ID: "news-frontend"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smart-feeds-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000  # Port mặc định cho ứng dụng React
+  selector:
+    app: smart-feeds
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smart-feeds-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: smart-feeds
+  template:
+    metadata:
+      labels:
+        app: smart-feeds
+    spec:
+      containers:
+      - name: smart-feeds
+        image: YOUR_USERNAME/smart-feeds-react-app:latest  # Thay YOUR_USERNAME bằng tên người dùng Docker Hub của bạn
+        ports:
+        - containerPort: 3000  # Port mặc định cho ứng dụng React
+        envFrom:
+        - configMapRef:
+            name: smart-feeds-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
