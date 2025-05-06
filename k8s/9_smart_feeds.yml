@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: smart-feeds
-        image: YOUR_USERNAME/smart-feeds-react-app:latest  # Thay YOUR_USERNAME bằng tên người dùng Docker Hub của bạn
+        image: b19dccn248/smart-feeds-react-app:latest  # Thay YOUR_USERNAME bằng tên người dùng Docker Hub của bạn
         ports:
         - containerPort: 3000  # Port mặc định cho ứng dụng React
         envFrom:
